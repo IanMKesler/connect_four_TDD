@@ -1,7 +1,6 @@
 require_relative '../lib/board'
 require_relative '../lib/player'
 require_relative '../lib/game'
-require_relative '../lib/main'
 
 describe Board do
     describe '.slide' do
@@ -45,24 +44,22 @@ describe Board do
     end
 end
 
-describe Player do
+describe Game do
     describe '.flip_turn' do
-        it 'changes turn from false to true' do
-            player = Player.new('X')
-            player.flip_turn
-            expect(player.turn).to eql(true)
+        it 'changes turn from player1 to player2' do
+            game = Game.new
+            game.flip_turn
+            expect(game.turn).to eql(game.player2)
         end
 
-        it 'changes turn from true to false' do
-            player = Player.new('X')
-            player.flip_turn
-            player.flip_turn
-            expect(player.turn).to eql(false)
+        it 'changes turn from player2 to player1' do
+            game = Game.new
+            game.flip_turn
+            game.flip_turn
+            expect(game.turn).to eql(game.player1)
         end
     end
-end
 
-describe Game do
     describe '.valid?' do
         it 'returns true if given a number 1-7' do
             game = Game.new
@@ -87,7 +84,7 @@ describe Game do
 
         it 'asks again if given an incorrect column' do
             game = Game.new
-            game.stub(:gets).and_return("0\n", "4\n")
+            game.stub(:gets).and_return("10\n", "4\n")
             expect(game.get_move('X')).to eql(4)
         end
     end
@@ -130,8 +127,22 @@ describe Game do
                 sym = i%2 == 0 ? 'X' : 'O'
                 game.slide(i+1, sym)
             end
-            expect(game.win?('O')). to be false
+            expect(game.win?('O')).to be false
             expect(game.win?('X')).to be false
         end
+    end
+end
+
+define '#play' do
+    it 'returns X is the winner when X wins' do
+
+    end
+
+    it 'returns O is the winner when O wins' do
+
+    end
+
+    it 'returns stalemate when out of spaces' do
+
     end
 end

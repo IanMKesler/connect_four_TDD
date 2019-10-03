@@ -1,13 +1,18 @@
 class Game
     require_relative 'board'
     require_relative 'player'
-    attr_accessor :board, :player1, :player2
+    attr_accessor :board, :player1, :player2, :turn
 
     def initialize
         @board = Board.new
         @player1 = Player.new('X')
         @player2 = Player.new('O')
+        @turn = @player1
     end
+
+    def flip_turn
+        @turn == @player1 ? @turn = @player2 : @turn = @player1
+      end
 
     def slide(column, sym)
         @board.slide(column, sym)
@@ -38,11 +43,12 @@ class Game
     private 
 
     def valid?(input)
-        input.match?(/[1-7]/) ? true : false
+        input.match?(/^([1-7])$/) ? true : false
     end
     
     def check(string, sym)
-        split = sym == 'X' ? 'O' : 'X'
+        return false unless sym
+        split = sym == @player1.sym ? @player2.sym : @player1.sym
         runs = string.split(/[#{split}0]/)
         count = runs.select {|run| run.length >= 4}
         count.empty? ? false : true 
@@ -67,7 +73,7 @@ class Game
     def construct_left_diag
         r = @board.last_position[0]+1
         c = @board.last_position[1]+1
-        diag = @board.show(r, c)
+        diag = @board.show(r, c).dup
         5.times do |i|
             begin
                 diag.prepend(@board.show(r-(i+1),c-(i+1)))
@@ -88,7 +94,7 @@ class Game
     def construct_right_diag
         r = @board.last_position[0]+1
         c = @board.last_position[1]+1
-        diag = @board.show(r, c)
+        diag = @board.show(r, c).dup
         5.times do |i|
             begin
                 diag.prepend(@board.show(r+(i+1),c-(i+1)))

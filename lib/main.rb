@@ -1,15 +1,33 @@
 require_relative 'game'
 
-game = Game.new
-3.times do
-    game.slide(1,'O')
-end
-2.times do
-    game.slide(2,'O')
-end
-game.slide(3,'O')
-4.times do |i|
-    game.slide(i+1, 'X')
+def round(game, sym)
+    column = game.get_move(sym)
+    while game.board.full?(column)
+        puts "The column is full, please choose another."
+        column = game.get_move(sym)
+    end
+    game.slide(column, sym)
 end
 
-puts game.win?('X')
+def play
+    game = Game.new
+    puts "Welcome to Connect Four!"
+    turn = 1
+    sym = game.turn.sym
+    until turn == 42 || (turn >=4 && game.win?(sym))
+        game.board.show
+        sym = game.turn.sym
+        round(game, sym)
+        game.flip_turn
+        turn += 1
+    end
+    game.win?(sym) ? "#{sym} is the winner!" : "Stalemate!"
+end
+
+
+    
+
+
+
+
+
