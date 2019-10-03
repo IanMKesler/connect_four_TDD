@@ -1,20 +1,24 @@
 class Board
+  attr_reader :last_position
   def initialize
     @board = []
     7.times do
       @board << ['0', '0', '0', '0', '0', '0']
     end
+    @last_position = nil
   end
 
   def slide(c, sym)
-      @board[c-1].each_with_index do |cell, index|
-        if @board[c-1][index] != '0'
-          @board[c-1][index-1] = sym
-          return
-        end
+    @board[c-1].each_with_index do |cell, index|
+      if @board[c-1][index] != '0'
+        @board[c-1][index-1] = sym
+        @last_position = [index-1, c-1]
+        return
       end
-      @board[c-1][@board[c-1].length-1] = sym
     end
+    @board[c-1][@board[c-1].length-1] = sym
+    @last_position = [@board[c-1].length-1, c-1]
+  end
 
   def show(r = nil, c = nil)
     if r && c

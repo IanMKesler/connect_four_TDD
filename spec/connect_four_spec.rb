@@ -74,6 +74,7 @@ describe Game do
             expect(game.send(:valid?, '0')).to be false
         end
     end
+
     describe '.get_move' do
         before do
             Game.any_instance.stub(:puts)
@@ -89,5 +90,48 @@ describe Game do
             game.stub(:gets).and_return("0\n", "4\n")
             expect(game.get_move('X')).to eql(4)
         end
-    end 
+    end
+    
+    describe '.win?' do
+        it 'returns true for four horizontal' do
+            game = Game.new
+            4.times do |i|
+                game.slide(i+1,'X')
+            end
+            expect(game.win?('X')).to be true
+        end
+
+        it 'returns true for four verticle' do
+            game = Game.new
+            4.times do
+                game.slide(1,'X')
+            end
+            expect(game.win?('X')).to be true
+        end
+
+        it 'returns true for four diagonal top left' do
+            game = Game.new
+            3.times do
+                game.slide(1,'O')
+            end
+            2.times do
+                game.slide(2,'O')
+            end
+            game.slide(3,'O')
+            4.times do |i|
+                game.slide(i+1, 'X')
+            end
+            expect(game.win?('X')).to be true
+        end
+
+        it 'returns false when no winner' do
+            game = Game.new
+            7.times do |i|
+                sym = i%2 == 0 ? 'X' : 'O'
+                game.slide(i+1, sym)
+            end
+            expect(game.win?('O')). to be false
+            expect(game.win?('X')).to be false
+        end
+    end
 end
