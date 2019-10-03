@@ -14,17 +14,18 @@ def play
     puts "Welcome to Connect Four!"
     turn = 1
     sym = game.turn.sym
-    until turn == 42 || (turn >=4 && game.win?(sym))
+    until turn == 43 || (turn >=4 && game.win?(sym))
         game.board.show
         sym = game.turn.sym
         round(game, sym)
         game.flip_turn
         turn += 1
     end
+    game.board.show
     game.win?(sym) ? "#{sym} is the winner!" : "Stalemate!"
 end
 
-
+puts play
     
 
 

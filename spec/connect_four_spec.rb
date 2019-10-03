@@ -1,6 +1,7 @@
 require_relative '../lib/board'
 require_relative '../lib/player'
 require_relative '../lib/game'
+require_relative '../lib/main'
 
 describe Board do
     describe '.slide' do
@@ -133,16 +134,16 @@ describe Game do
     end
 end
 
-define '#play' do
+describe '#play' do
     it 'returns X is the winner when X wins' do
-
+        expect(play).to eql("X is the winner!")
     end
 
     it 'returns O is the winner when O wins' do
-
+        expect(play).to eql("O is the winner!")
     end
 
     it 'returns stalemate when out of spaces' do
-
+        expect(play).to eql("Stalemate!")
     end
 end
